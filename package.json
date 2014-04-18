@@ -1,0 +1,21 @@
+{
+  "name": "wambar",
+  "version": "0.0.0",
+  "description": "<3 web audio, <3 wambar!",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "web",
+    "audio",
+    "api",
+    "macro",
+    "dsl"
+  ],
+  "author": "Jason Frame <jason@onehackoranother.com> (http://jasonframe.co.uk)",
+  "license": "ISC",
+  "dependencies": {
+    "audio-buffer-utils": "0.0.1"
+  }
+}
