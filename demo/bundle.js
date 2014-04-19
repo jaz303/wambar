@@ -144,6 +144,20 @@ Node.prototype._freeze = function() {
         Object.freeze(this.outputs);
     }
 }
+
+Node.prototype._setDefaults = function(defaults) {
+    for (var k in defaults) {
+        var value = defaults[k];
+        if (value === void 0) {
+            continue;
+        }
+        if (this[k] instanceof AudioParam) {
+            this[k].value = value;
+        } else {
+            this[k] = value;
+        }
+    }
+}
 },{"./Input":4,"./Output":6}],6:[function(require,module,exports){
 module.exports = Output;
 
@@ -186,6 +200,12 @@ var Eq = Node.extend({
 		this._addOutput('output', this.native, 0);
 
 		this._freeze();
+
+		this._setDefaults({
+		    frequency   : opts.frequency,
+		    Q           : opts.Q,
+		    gain        : opts.gain
+		});
 	
 	}
 });
@@ -198,46 +218,52 @@ var Node = require('../Node');
 
 var Filter = Node.extend({
 
-	nodeType: 'filter',
+    nodeType: 'filter',
 
-	init: function(opts) {
+    init: function(opts) {
 
-		this.native = this.context.createBiquadFilter();
-		this.native.type = 'peaking';
-		
-		this._addParameter(this.native, 'frequency');
-		this._addParameter(this.native, 'Q');
-		this._addParameter(this.native, 'gain');
+        this.native = this.context.createBiquadFilter();
 
-		this._addDiscreteProperty('type', [
-			'lowpass',
-			'highpass',
-			'bandpass',
-			'lowshelf',
-			'highshelf',
-			'peaking',
-			'notch',
-			'allpass'
-		]);
+        this._addDiscreteProperty('type', [
+            'lowpass',
+            'highpass',
+            'bandpass',
+            'lowshelf',
+            'highshelf',
+            'peaking',
+            'notch',
+            'allpass'
+        ]);
+        
+        this._addParameter(this.native, 'frequency');
+        this._addParameter(this.native, 'Q');
+        this._addParameter(this.native, 'gain');
 
-		this._addInput('input', this.native, 0);
-		this._addOutput('output', this.native, 0);
+        this._addInput('input', this.native, 0);
+        this._addOutput('output', this.native, 0);
 
-		this._freeze();
+        this._freeze();
 
-	},
+        this._setDefaults({
+            type        : opts.type,
+            frequency   : opts.frequency,
+            Q           : opts.Q,
+            gain        : opts.gain
+        });
 
-	get type() {
-		return this.native.type;
-	},
+    },
 
-	set type(type) {
-		this.native.type = type;
-	}
+    get type() {
+        return this.native.type;
+    },
+
+    set type(type) {
+        this.native.type = type;
+    }
 })
 
 module.exports = function(ctx, opts) {
-	return new Filter(ctx, opts);
+    return new Filter(ctx, opts);
 }
 },{"../Node":5}],10:[function(require,module,exports){
 module.exports = function(ctx, opts) {
