@@ -5,7 +5,21 @@ window.init = function() {
 	var ctx = new window.webkitAudioContext();
 	var session = wambar.createSession(ctx);
 
-	var graph = session('osc#osc(type=sine,frequency=220) -> filter#filter(type=notch) -> eq#eq');
+	var graph = document.getElementById('graph');
+	var button = document.getElementById('go');
+
+	button.addEventListener('click', function() {
+
+		var instance = session(graph.value);
+
+		var first = instance.graph.nodes[0];
+		if (first.start) {
+			first.start(0);
+		}
+
+		console.log(instance);
+
+	});
 
 	// wambar.macro('channel-strip', 'eq() -> eq() -> eq() -> eq() -> gain');
 

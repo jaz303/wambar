@@ -1,60 +1,13 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-window.wambar = require('../');
+!function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.wambar=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+var utils = _dereq_('audio-buffer-utils');
 
-window.init = function() {
-
-	var ctx = new window.webkitAudioContext();
-	var session = wambar.createSession(ctx);
-
-	var graph = document.getElementById('graph');
-	var button = document.getElementById('go');
-
-	button.addEventListener('click', function() {
-
-		var instance = session(graph.value);
-
-		var first = instance.graph.nodes[0];
-		if (first.start) {
-			first.start(0);
-		}
-
-		console.log(instance);
-
-	});
-
-	// wambar.macro('channel-strip', 'eq() -> eq() -> eq() -> eq() -> gain');
-
-	// wambar.processor('bitcrusher', {
-	// 	defaults: {
-	// 		bitDepth: 12
-	// 	},
-	// 	init: function() {
-
-	// 	},
-	// 	process: function() {
-
-	// 	}
-	// });
-
-	// var p1 = wambar('[ osc#osc1, osc#osc2, osc#osc3 ] -> output');
-
-	// // 3 oscillators into a mixer
-	// var p2 = wambar('[ osc, osc, osc ] -> output');
-
-	// var p3 = wambar('[ osc -> filter, osc -> filter, osc -> filter ] -> output');
-
-}
-
-},{"../":2}],2:[function(require,module,exports){
-var utils = require('audio-buffer-utils');
-
-exports.createSession   = require('./lib/session');
+exports.createSession   = _dereq_('./lib/session');
 exports.cloneBuffer     = utils.clone;
 exports.reverseBuffer   = utils.reverse;
 exports.invertBuffer    = utils.invert;
 exports.zeroBuffer      = utils.zero;
 
-},{"./lib/session":15,"audio-buffer-utils":16}],3:[function(require,module,exports){
+},{"./lib/session":14,"audio-buffer-utils":15}],2:[function(_dereq_,module,exports){
 module.exports = Connection;
 
 function Connection(src, dest) {
@@ -85,7 +38,7 @@ Connection.prototype.disconnect = function() {
 		this._connected = false;
 	}
 }
-},{}],4:[function(require,module,exports){
+},{}],3:[function(_dereq_,module,exports){
 module.exports = Input;
 
 function Input(name, nativeNode, ix) {
@@ -94,11 +47,11 @@ function Input(name, nativeNode, ix) {
 	this._ix = ix;
 }
 
-},{}],5:[function(require,module,exports){
+},{}],4:[function(_dereq_,module,exports){
 module.exports = Node;
 
-var Input   = require('./Input'),
-    Output  = require('./Output');
+var Input   = _dereq_('./Input'),
+    Output  = _dereq_('./Output');
 
 function Node(ctx) {
     this.context = ctx;
@@ -172,10 +125,10 @@ Node.prototype._setDefaults = function(defaults) {
         }
     }
 }
-},{"./Input":4,"./Output":6}],6:[function(require,module,exports){
+},{"./Input":3,"./Output":5}],5:[function(_dereq_,module,exports){
 module.exports = Output;
 
-var Connection = require('./Connection');
+var Connection = _dereq_('./Connection');
 
 function Output(name, nativeNode, ix) {
 	this.name = name;
@@ -186,17 +139,17 @@ function Output(name, nativeNode, ix) {
 Output.prototype.connect = function(input) {
 	return new Connection(this, input);
 }
-},{"./Connection":3}],7:[function(require,module,exports){
+},{"./Connection":2}],6:[function(_dereq_,module,exports){
 module.exports = {
-    eq      	: require('./nodes/eq'),
-    filter 		: require('./nodes/filter'),
-    mixer 		: require('./nodes/mixer'),
-    osc     	: require('./nodes/osc'),
-    output 		: require('./nodes/output'),
-    pipeline	: require('./nodes/pipeline')
+    eq      	: _dereq_('./nodes/eq'),
+    filter 		: _dereq_('./nodes/filter'),
+    mixer 		: _dereq_('./nodes/mixer'),
+    osc     	: _dereq_('./nodes/osc'),
+    output 		: _dereq_('./nodes/output'),
+    pipeline	: _dereq_('./nodes/pipeline')
 };
-},{"./nodes/eq":8,"./nodes/filter":9,"./nodes/mixer":10,"./nodes/osc":11,"./nodes/output":12,"./nodes/pipeline":13}],8:[function(require,module,exports){
-var Node = require('../Node');
+},{"./nodes/eq":7,"./nodes/filter":8,"./nodes/mixer":9,"./nodes/osc":10,"./nodes/output":11,"./nodes/pipeline":12}],7:[function(_dereq_,module,exports){
+var Node = _dereq_('../Node');
 
 var Eq = Node.extend({
 
@@ -228,8 +181,8 @@ var Eq = Node.extend({
 module.exports = function(ctx, opts) {
 	return new Eq(ctx, opts);
 }
-},{"../Node":5}],9:[function(require,module,exports){
-var Node = require('../Node');
+},{"../Node":4}],8:[function(_dereq_,module,exports){
+var Node = _dereq_('../Node');
 
 var Filter = Node.extend({
 
@@ -280,12 +233,12 @@ var Filter = Node.extend({
 module.exports = function(ctx, opts) {
     return new Filter(ctx, opts);
 }
-},{"../Node":5}],10:[function(require,module,exports){
+},{"../Node":4}],9:[function(_dereq_,module,exports){
 module.exports = function(ctx, opts) {
 	return "MIXER";
 }
-},{}],11:[function(require,module,exports){
-var Node = require('../Node');
+},{}],10:[function(_dereq_,module,exports){
+var Node = _dereq_('../Node');
 
 var Osc = Node.extend({
 
@@ -343,8 +296,8 @@ var Osc = Node.extend({
 module.exports = function(ctx, opts) {
     return new Osc(ctx, opts);
 }
-},{"../Node":5}],12:[function(require,module,exports){
-var Node = require('../Node');
+},{"../Node":4}],11:[function(_dereq_,module,exports){
+var Node = _dereq_('../Node');
 
 var Output = Node.extend({
 
@@ -365,8 +318,8 @@ var Output = Node.extend({
 module.exports = function(ctx, opts) {
     return new Output(ctx, opts);
 }
-},{"../Node":5}],13:[function(require,module,exports){
-var Node = require('../Node');
+},{"../Node":4}],12:[function(_dereq_,module,exports){
+var Node = _dereq_('../Node');
 
 var Pipeline = Node.extend({
 
@@ -429,7 +382,7 @@ function Pipeline(ctx, opts) {
 	this.nodes = [];
 }
 
-},{"../Node":5}],14:[function(require,module,exports){
+},{"../Node":4}],13:[function(_dereq_,module,exports){
 module.exports = function parse(session, source) {
 
 	var tokens = source.split(/([\+\-]?[0-9]+(?:\.[0-9]+)?|=|\[|\]|\(|\)|#[\w-]+|[a-z][\w-]+|\-\>|,)/i)
@@ -571,9 +524,9 @@ module.exports = function parse(session, source) {
 
 }
 
-},{}],15:[function(require,module,exports){
-var nodeTypes 	= require('./node_types'),
-	parse 		= require('./parser');
+},{}],14:[function(_dereq_,module,exports){
+var nodeTypes 	= _dereq_('./node_types'),
+	parse 		= _dereq_('./parser');
 
 module.exports = function(audioContext) {
 
@@ -597,7 +550,7 @@ module.exports = function(audioContext) {
 
 }
 
-},{"./node_types":7,"./parser":14}],16:[function(require,module,exports){
+},{"./node_types":6,"./parser":13}],15:[function(_dereq_,module,exports){
 exports.clone   = clone;
 exports.reverse = reverse;
 exports.invert  = invert;
@@ -644,3 +597,5 @@ function zero(buffer) {
     }
 }
 },{}]},{},[1])
+(1)
+});
